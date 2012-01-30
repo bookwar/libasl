@@ -1,4 +1,4 @@
-Name:		asl
+Name:		libasl
 Version:	1.0.43
 Release:	1%{?dist}
 Summary:	Adobe Source Libraries
@@ -6,7 +6,7 @@ Summary:	Adobe Source Libraries
 License:	MIT
 URL:  		http://stlab.adobe.com
 Source0:	http://downloads.sourceforge.net/project/adobe-source/adobe-source/1.0.43/asl_1.0.43.tgz
-Patch0:		asl-compile-without-boost.patch
+Patch0:		libasl-compile-without-boost.patch
 
 BuildRequires:	boost-jam tbb-devel boost-build boost-devel
 
@@ -18,7 +18,7 @@ Adobe Source Libraries
 %patch0 -p1 -b boost.fix
 
 %build
-bjam link=shared %{name} release
+bjam link=shared asl release
 
 %install
 rm -rf $RPM_BUILD_ROOT
