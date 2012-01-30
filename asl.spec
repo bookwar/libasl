@@ -4,8 +4,8 @@ Release:	1%{?dist}
 Summary:	Adobe Source Libraries
 
 License:	MIT
-URL:		http://stlab.adobe.com
-Source0:	asl_1.0.43.tgz
+URL:  		http://stlab.adobe.com
+Source0:	http://downloads.sourceforge.net/project/adobe-source/adobe-source/1.0.43/asl_1.0.43.tgz
 Patch0:		asl-compile-without-boost.patch
 
 BuildRequires:	boost-jam tbb-devel boost-build boost-devel
