@@ -1,0 +1,76 @@
+diff -uNr source_release/adobe/cmath.hpp source_release-fixed/adobe/cmath.hpp
+--- source_release/adobe/cmath.hpp	2010-11-08 19:18:19.000000000 +0100
++++ source_release-fixed/adobe/cmath.hpp	2012-01-30 09:56:16.298679035 +0100
+@@ -37,7 +37,7 @@
+ #define ADOBE_HAS_CPP_CMATH 
+ 
+ #elif __GNUC__ == 4 
+-#if (__GNUC_MINOR__ < 6) || (!(defined(_GLIBCXX_USE_C99_MATH_TR1)))
++#if (__GNUC_MINOR__ < 8) || (!(defined(_GLIBCXX_USE_C99_MATH_TR1)))
+ // at least Ubuntu 9.x, gcc 4.4.1, still falls into this case
+ /*
+     The currently supported version of GNUC has C99 extensions in math.h. But no TR1 extensions.
+@@ -46,7 +46,6 @@
+ #include <cmath>
+ #else 
+ #include <tr1/cmath>
+-s
+ #define ADOBE_HAS_C99_STD_MATH_H
+ #endif
+ #endif
+diff -uNr source_release/jamroot.jam source_release-fixed/jamroot.jam
+--- source_release/jamroot.jam	2010-11-08 20:30:33.000000000 +0100
++++ source_release-fixed/jamroot.jam	2012-01-30 09:56:16.714676831 +0100
+@@ -61,8 +61,9 @@
+    $(tbb_requirements)
+    <include>.
+    <toolset>gcc:<define>NOMINMAX
+-   <toolset>gcc:<architecture>x86
+-   <toolset>gcc,<threading>multi:<instruction-set>i486
++   #<toolset>gcc:<architecture>x86
++   #<toolset>gcc,<threading>multi:<instruction-set>i486
++   #<toolset>gcc,<threading>multi:<cxxflags>"-m32"
+    <toolset>msvc:<cxxflags>"-DUNICODE -D_UNICODE"
+    <toolset>msvc-8.0:<cxxflags>"/W3 /WX /Wp64 /Zc:wchar_t /Zc:forScope"
+    <toolset>msvc-9.0:<cxxflags>"/W3 /WX /Zc:wchar_t /Zc:forScope"
+@@ -72,10 +73,10 @@
+    $(ASL_ADDITIONAL_MACROS)
+    <define>BOOST_ALL_NO_LIB 
+    <toolset>darwin:<linkflags>"-lSystemStubs"
+-   <threading>multi:<library>/boost/thread//boost_thread
+-   <library>/boost/filesystem
+-   <library>/boost/system
+-   <library>/boost/signals
++#   <threading>multi:<library>/boost/thread//boost_thread
++#   <library>/boost/filesystem
++#   <library>/boost/system
++#   <library>/boost/signals
+   ;
+ 
+  project
+@@ -87,7 +88,7 @@
+     <threading>multi
+     <preserve-test-targets>on
+   :  build-dir
+-     $(TOP)/../built_artifacts
++     $(TOP)/build
+    ;
+ 
+ #
+@@ -114,6 +115,7 @@
+ 
+ 
+ import os ;
++import path ;
+ local boost-path = [ os.environ BOOST_PATH ] ;
+ if $(boost-path)
+ {
+@@ -122,7 +124,7 @@
+   boost-path = [ path.make ../boost_libraries ] ;
+ }
+ 
+-use-project /boost : $(boost-path)  ;
++#use-project /boost : $(boost-path)  ;
+ 
+ 
+ lib asl
